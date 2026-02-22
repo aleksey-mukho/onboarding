@@ -1,17 +1,6 @@
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
-import React, { useState } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import CaretDown from './caretDown.png';
-import { AIRPORTS } from '@/screens/onboarding/onboardingQuestions/airports';
-import * as Haptics from 'expo-haptics';
-import { ModalCustom } from '@/widgets/modal/modal';
 
 export const Dropdown = React.memo(
   ({

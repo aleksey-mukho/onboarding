@@ -3,7 +3,6 @@ import Animated, {
   FadeInRight,
   FadeOutLeft,
   useAnimatedStyle,
-  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import { StyleSheet, Text, TextInput } from 'react-native';

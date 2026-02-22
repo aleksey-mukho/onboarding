@@ -2,11 +2,9 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import SegmentedControl from '@/screens/welcome/assets/segmented_control.png';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
