@@ -16,10 +16,13 @@ import { TRAVEL_OPTIONS } from '@/screens/onboarding/onboardingQuestions/travelO
 import { InteractiveTextInput } from '@/screens/onboarding/onboardingQuestions/interactiveTextInput';
 import { HomeAirportDropdown } from '@/screens/onboarding/onboardingQuestions/homeAirportDropdown/homeAirportDropdown';
 import { AIRPORTS } from '@/screens/onboarding/onboardingQuestions/airports';
+import { useRouter } from 'expo-router';
 
 export const Onboarding = React.memo(() => {
   const travelInputRef = useRef<TextInput>(null);
   const airportInputRef = useRef<TextInput>(null);
+
+  const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState(0);
   // On second step we can change active step to show travel step as active
@@ -42,8 +45,10 @@ export const Onboarding = React.memo(() => {
     if (currentStep === 0) {
       setCurrentStep(1);
       setLocalStep(1);
+    } else {
+      router.push('/dashboard');
     }
-  }, [currentStep]);
+  }, [currentStep, router]);
 
   const onChangeAirportName = useCallback(() => {
     if (!isAirportsModalOpen) {

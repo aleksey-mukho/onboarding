@@ -25,29 +25,17 @@ import Close from './close.png';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-type PropsType = {
-  isVisible: boolean;
-  isDisabled?: boolean;
-  setIsVisible: (isVisible: boolean) => void;
-  children: React.ReactNode;
-  onPress?: () => void;
-  onApply?: () => void;
-  title?: string;
-  onCloseCb?: () => void;
-  blurIntensity?: number;
-};
-
 export function ModalCustom({
   isVisible,
-  isDisabled,
   setIsVisible,
   children,
-  onPress,
-  onApply,
-  onCloseCb,
   title,
-  blurIntensity = 1,
-}: PropsType) {
+}: {
+  isVisible: boolean;
+  setIsVisible: (isVisible: boolean) => void;
+  children: React.ReactNode;
+  title: string;
+}) {
   const insets = useSafeAreaInsets();
   const styles = getStyles(insets.bottom);
   const [isVisibleLocal, setIsVisibleLocal] = useState(isVisible);
@@ -70,18 +58,10 @@ export function ModalCustom({
         easing: Easing.out(Easing.ease),
       });
     } else {
-      translateY.value = withTiming(
-        windowHeight,
-        {
-          duration: 300,
-          easing: Easing.in(Easing.ease),
-        },
-        (isFinished) => {
-          if (isFinished && onCloseCb) {
-            scheduleOnRN(onCloseCb);
-          }
-        }
-      );
+      translateY.value = withTiming(windowHeight, {
+        duration: 300,
+        easing: Easing.in(Easing.ease),
+      });
       blurOpacity.value = withTiming(0, {
         duration: 300,
         easing: Easing.in(Easing.ease),
@@ -96,15 +76,6 @@ export function ModalCustom({
 
     setIsVisibleLocal(false);
   }, [setIsVisible, setIsVisibleLocal]);
-
-  const onApplyPress = useCallback(() => {
-    if (isDisabled) {
-      return;
-    }
-
-    onApply?.();
-    onClose();
-  }, [onApply, onClose, isDisabled]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
@@ -134,9 +105,6 @@ export function ModalCustom({
           (isFinished) => {
             if (isFinished) {
               scheduleOnRN(onClose);
-              if (onCloseCb) {
-                scheduleOnRN(onCloseCb);
-              }
             }
           }
         );
@@ -161,7 +129,7 @@ export function ModalCustom({
     >
       <Animated.View style={[styles.blurContainer, blurStyle]}>
         <BlurView
-          intensity={blurIntensity}
+          intensity={1}
           tint={'systemMaterialLight'}
           style={styles.blurContainer}
         />
@@ -210,11 +178,6 @@ const getStyles = (paddingBottom: number) =>
       height: 160,
       resizeMode: 'stretch',
     },
-    overlay: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
     modalContent: {
       backgroundColor: '#fff',
       borderTopLeftRadius: 16,
@@ -238,14 +201,6 @@ const getStyles = (paddingBottom: number) =>
     },
     body: {
       paddingVertical: 20,
-    },
-    rectangle: {
-      alignSelf: 'center',
-      marginBottom: 10,
-      height: 5,
-      width: 60,
-      borderRadius: 3,
-      backgroundColor: '#ddd',
     },
     blurContainer: {
       flex: 1,
