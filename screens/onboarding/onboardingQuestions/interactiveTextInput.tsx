@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { StyleSheet, Text, TextInput } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -16,8 +16,8 @@ export const InteractiveTextInput = React.memo(
     text,
     setText,
     isValid,
-    currentStep,
-    setCurrentStep,
+    localStep,
+    setLocalStep,
     dataType,
     onChangeTextCustom,
   }: {
@@ -25,8 +25,8 @@ export const InteractiveTextInput = React.memo(
     text: string;
     setText: (text: string) => void;
     isValid: boolean;
-    currentStep: number | null;
-    setCurrentStep: (step: number) => void;
+    localStep: number | null;
+    setLocalStep: (step: number) => void;
     dataType: 'travelType' | 'airportType';
     onChangeTextCustom?: () => void;
   }) => {
@@ -36,8 +36,8 @@ export const InteractiveTextInput = React.memo(
     }, [isValid]);
 
     const isActiveStyle =
-      (currentStep === 0 && dataType === 'travelType') ||
-      (currentStep === 1 && dataType === 'airportType');
+      (localStep === 0 && dataType === 'travelType') ||
+      (localStep === 1 && dataType === 'airportType');
     const animatedStyleTitle = useAnimatedStyle(() => ({
       fontSize: withTiming(isActiveStyle ? 28 : 16),
       paddingRight: withTiming(isActiveStyle ? 0 : 8),
@@ -50,12 +50,12 @@ export const InteractiveTextInput = React.memo(
     }));
 
     const onFocus = useCallback(() => {
-      if (currentStep === 1 && dataType === 'travelType') {
-        setCurrentStep(0);
-      } else if (currentStep === 0 && dataType === 'airportType') {
-        setCurrentStep(1);
+      if (localStep === 1 && dataType === 'travelType') {
+        setLocalStep(0);
+      } else if (localStep === 0 && dataType === 'airportType') {
+        setLocalStep(1);
       }
-    }, [currentStep, setCurrentStep, dataType]);
+    }, [localStep, setLocalStep, dataType]);
 
     const onChangeText = useCallback((text: string) => {
       setText(text);
@@ -70,12 +70,6 @@ export const InteractiveTextInput = React.memo(
         entering={FadeInRight.duration(800)}
         exiting={FadeOutLeft.duration(800)}
       >
-        {!isValid && dataType === 'travelType' && (
-          <Text style={styles.description}>
-            To personalise your recommendations, tell me a little about how you
-            travel:
-          </Text>
-        )}
         <Animated.View
           style={[
             styles.mainContent,
@@ -118,12 +112,6 @@ const styles = StyleSheet.create({
   },
   column: {
     flexDirection: 'column',
-  },
-  description: {
-    fontSize: 20,
-    color: '#7a7a7a',
-    fontWeight: '600',
-    paddingVertical: 16,
   },
   mainContent: {
     flexDirection: 'row',

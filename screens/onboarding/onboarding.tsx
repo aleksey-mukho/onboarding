@@ -63,9 +63,15 @@ export const Onboarding = React.memo(() => {
         style={styles.container}
       >
         <OnboardingHeader />
+        {!isValidTravelType && (
+          <Text style={styles.descriptionTravelType}>
+            To personalise your recommendations, tell me a little about how you
+            travel:
+          </Text>
+        )}
         <InteractiveTextInput
-          currentStep={localStep}
-          setCurrentStep={setLocalStep}
+          localStep={localStep}
+          setLocalStep={setLocalStep}
           inputRef={travelInputRef}
           text={travelType}
           setText={setTravelType}
@@ -74,8 +80,8 @@ export const Onboarding = React.memo(() => {
         />
         {currentStep === 1 && (
           <InteractiveTextInput
-            currentStep={localStep}
-            setCurrentStep={setLocalStep}
+            localStep={localStep}
+            setLocalStep={setLocalStep}
             inputRef={airportInputRef}
             text={airportName}
             setText={setAirportName}
@@ -128,6 +134,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#7a7a7a',
+  },
+  descriptionTravelType: {
+    fontSize: 20,
+    color: '#7a7a7a',
+    fontWeight: '600',
+    paddingVertical: 16,
   },
   fillSpace: { flex: 1 },
   safeArea: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 16 },
