@@ -2,20 +2,18 @@ import React from 'react';
 import Flash from './assets/flash.png';
 import { View, Image, StyleSheet, Text } from 'react-native';
 
-export const OnboardingBonusesItem = React.memo(
-  ({ text }: { text: string }) => {
-    return (
-      <View style={styles.container}>
-        <View style={styles.iconWrapper}>
-          <Image source={Flash} style={styles.icon} />
-        </View>
-        <Text style={styles.text}>{text}</Text>
+export const WelcomeBonusesItem = React.memo(({ text }: { text: string }) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.iconWrapper}>
+        <Image source={Flash} style={styles.icon} />
       </View>
-    );
-  }
-);
+      <Text style={styles.text}>{text}</Text>
+    </View>
+  );
+});
 
-OnboardingBonusesItem.displayName = 'OnboardingBonusesItem';
+WelcomeBonusesItem.displayName = 'OnboardingBonusesItem';
 
 const styles = StyleSheet.create({
   container: {

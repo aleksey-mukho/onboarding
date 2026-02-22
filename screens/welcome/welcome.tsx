@@ -5,10 +5,10 @@ import SegmentedControl from './assets/segmented_control.png';
 import Profile from './assets/profile.png';
 import Promo from './assets/promo.png';
 
-import { OnboardingBonusesItem } from '@/components/onboarding/onboardingBonusesItem';
+import { WelcomeBonusesItem } from '@/screens/welcome/welcomeBonusesItem';
 import { Link } from 'expo-router';
 
-export const Onboarding = () => {
+export const Welcome = () => {
   return (
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.wrapper}>
@@ -28,12 +28,12 @@ export const Onboarding = () => {
           Simply chat with our Mal AI to book your next trip and get up to 15%
           cashback on your first two bookings internationally.
         </Text>
-        <OnboardingBonusesItem text={'Pay over 4 installments'} />
-        <OnboardingBonusesItem text={'Best price guranteed'} />
-        <OnboardingBonusesItem text={'Pay over 4 installments'} />
+        <WelcomeBonusesItem text={'Pay over 4 installments'} />
+        <WelcomeBonusesItem text={'Best price guranteed'} />
+        <WelcomeBonusesItem text={'Pay over 4 installments'} />
       </View>
       <View style={styles.footer}>
-        <Link href={'/onboarding-questions'} style={styles.footerButton}>
+        <Link href={'/onboarding'} style={styles.footerButton}>
           <Text style={styles.footerButtonText}>Get Started</Text>
         </Link>
       </View>

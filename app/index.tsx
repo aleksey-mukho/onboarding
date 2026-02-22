@@ -1,6 +1,6 @@
 import React from 'react';
-import { Onboarding } from '@/components/onboarding/onboarding';
+import { Welcome } from '@/screens/welcome/welcome';
 
-export default function HomeScreen() {
-  return <Onboarding />;
+export default function WelcomeScreen() {
+  return <Welcome />;
 }
