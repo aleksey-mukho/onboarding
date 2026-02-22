@@ -15,13 +15,17 @@ import { ModalCustom } from '@/widgets/modal/modal';
 
 export const Dropdown = React.memo(
   ({
+    value,
+    placeholder,
     children,
-    isModalOpen,
     setIsModalOpen,
+    isValidValue,
   }: {
+    value: string | undefined;
+    placeholder: string;
     children: React.ReactNode;
-    isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
+    isValidValue: boolean;
   }) => {
     return (
       <>
@@ -30,18 +34,14 @@ export const Dropdown = React.memo(
           style={styles.container}
         >
           <View style={styles.content}>
-            <Text style={styles.placeholder}>Airport</Text>
-            <Text style={styles.text}>Select or Start Typing</Text>
+            <Text style={styles.placeholder}>{placeholder}</Text>
+            <Text style={[isValidValue ? styles.text : styles.defaultText]}>
+              {value}
+            </Text>
           </View>
           <Image source={CaretDown} style={styles.caret} />
         </Pressable>
-        <ModalCustom
-          isVisible={isModalOpen}
-          setIsVisible={setIsModalOpen}
-          title="The airport where you normally depart from"
-        >
-          {children}
-        </ModalCustom>
+        {children}
       </>
     );
   }
@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     height: 51,
     paddingTop: 8,
   },
-  text: { flex: 1, color: '#00000050', fontSize: 14 },
+  defaultText: { flex: 1, color: '#00000050', fontSize: 14 },
+  text: { flex: 1, color: '#000000', fontSize: 14 },
   caret: {
     width: 20,
     height: 20,

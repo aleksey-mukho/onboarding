@@ -21,12 +21,14 @@ export const HomeAirportDropdownModalContent = React.memo(
     selectedId,
     setSelectedId,
     initialAirportName,
+    setAirportName,
   }: {
     isModalOpen: boolean;
     setIsModalOpen: (isOpen: boolean) => void;
     selectedId: string | null;
     setSelectedId: (id: string) => void;
     initialAirportName: string;
+    setAirportName: (name: string) => void;
   }) => {
     const [airport, setAirport] = useState(initialAirportName);
 
@@ -58,6 +60,14 @@ export const HomeAirportDropdownModalContent = React.memo(
       [isModalOpen]
     );
 
+    const onPressAirport = useCallback(
+      (airport: (typeof AIRPORTS)[0]) => () => {
+        handleSelectAirport(airport);
+        setAirportName(airport.name);
+      },
+      []
+    );
+
     return (
       <>
         <View style={styles.inputContainer}>
@@ -81,7 +91,7 @@ export const HomeAirportDropdownModalContent = React.memo(
             <Pressable
               key={airport.id}
               style={styles.airportRow}
-              onPress={() => handleSelectAirport(airport)}
+              onPress={onPressAirport(airport)}
             >
               <Text style={styles.airportRowText}>{airport.name}</Text>
               <View

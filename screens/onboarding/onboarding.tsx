@@ -14,14 +14,16 @@ import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { NextButton } from '@/widgets/buttons/nextButton/nextButton';
 import { TRAVEL_OPTIONS } from '@/screens/onboarding/onboardingQuestions/travelOptions';
 import { InteractiveTextInput } from '@/screens/onboarding/onboardingQuestions/interactiveTextInput';
-import { Dropdown } from '@/widgets/dropdown/dropdown';
 import { HomeAirportDropdown } from '@/screens/onboarding/onboardingQuestions/homeAirportDropdown/homeAirportDropdown';
+import { AIRPORTS } from '@/screens/onboarding/onboardingQuestions/airports';
 
 export const Onboarding = React.memo(() => {
   const travelInputRef = useRef<TextInput>(null);
   const airportInputRef = useRef<TextInput>(null);
 
   const [currentStep, setCurrentStep] = useState(0);
+  // On second step we can change active step to show travel step as active
+  const [localStep, setLocalStep] = useState(0);
   const [travelType, setTravelType] = useState('');
   const [airportName, setAirportName] = useState('');
   const [isAirportsModalOpen, setIsAirportsModalOpen] = useState(false);
@@ -29,12 +31,17 @@ export const Onboarding = React.memo(() => {
   const isValidTravelType = TRAVEL_OPTIONS.some(
     (opt) => opt.id === travelType.toLowerCase()
   );
+  const isValidAirportName = AIRPORTS.some(
+    (opt) => opt.name.toLowerCase() === airportName.toLowerCase()
+  );
+
   const isActiveNextButton =
-    currentStep === 0 ? isValidTravelType : isValidTravelType;
+    currentStep === 0 ? isValidTravelType : isValidAirportName;
 
   const onNextButtonPress = useCallback(() => {
     if (currentStep === 0) {
       setCurrentStep(1);
+      setLocalStep(1);
     }
   }, [currentStep]);
 
@@ -52,37 +59,39 @@ export const Onboarding = React.memo(() => {
       >
         <OnboardingHeader />
         <InteractiveTextInput
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
+          currentStep={localStep}
+          setCurrentStep={setLocalStep}
           inputRef={travelInputRef}
           text={travelType}
           setText={setTravelType}
           isValid={isValidTravelType}
           dataType="travelType"
         />
-        <InteractiveTextInput
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
-          inputRef={airportInputRef}
-          text={airportName}
-          setText={setAirportName}
-          isValid={isValidTravelType}
-          dataType="airportType"
-          onChangeTextCustom={onChangeAirportName}
-        />
+        {currentStep === 1 && (
+          <InteractiveTextInput
+            currentStep={localStep}
+            setCurrentStep={setLocalStep}
+            inputRef={airportInputRef}
+            text={airportName}
+            setText={setAirportName}
+            isValid={isValidTravelType}
+            dataType="airportType"
+            onChangeTextCustom={onChangeAirportName}
+          />
+        )}
         <View style={styles.fillSpace} />
         <Animated.View
           entering={FadeInRight.duration(800)}
           exiting={FadeOutLeft.duration(800)}
         >
           <Text style={styles.footerText}>
-            {currentStep === 0
+            {localStep === 0
               ? 'Your typical reason for travel'
               : 'The airport where you normally depart from'}
           </Text>
         </Animated.View>
         <View style={styles.footer}>
-          {currentStep === 0 ? (
+          {localStep === 0 ? (
             <ReasonsForTravelChips
               inputRef={travelInputRef}
               travelType={travelType}
@@ -91,6 +100,7 @@ export const Onboarding = React.memo(() => {
           ) : (
             <HomeAirportDropdown
               airportName={airportName}
+              isValidAirportName={isValidAirportName}
               isModalOpen={isAirportsModalOpen}
               setIsModalOpen={setIsAirportsModalOpen}
               setAirportName={setAirportName}

@@ -114,6 +114,7 @@ InteractiveTextInput.displayName = 'OnboardingReasonsForTravelText';
 
 const styles = StyleSheet.create({
   row: {
+    paddingTop: 16,
     flexDirection: 'row',
   },
   column: {
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   mainContent: {
-    paddingVertical: 16,
     flexDirection: 'row',
   },
   title: {
