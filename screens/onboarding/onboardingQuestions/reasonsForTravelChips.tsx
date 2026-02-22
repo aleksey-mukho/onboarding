@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Chip } from '@/widgets/chip';
+import { Chip } from '@/widgets/chip/chip';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { TRAVEL_OPTIONS } from '@/screens/onboarding/onboardingQuestions/travelOptions';
 import * as Haptics from 'expo-haptics';

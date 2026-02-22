@@ -9,70 +9,43 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import CaretDown from './caretDown.png';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { Search, X } from 'lucide-react-native';
 import { AIRPORTS } from '@/screens/onboarding/onboardingQuestions/airports';
 import * as Haptics from 'expo-haptics';
+import { ModalCustom } from '@/widgets/modal/modal';
 
-export const Dropdown = React.memo(() => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleSelectAirport = (airport: (typeof AIRPORTS)[0]) => {
-    // setSelectedId(airport.id);
-    // setTextInput(airport.name);
-    // setIsAirportModalOpen(false);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
-
-  return (
-    <>
-      <Pressable onPress={() => setIsModalOpen(true)} style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.placeholder}>Airport</Text>
-          <Text style={styles.text}>Select or Start Typing</Text>
-        </View>
-        <Image source={CaretDown} style={styles.caret} />
-      </Pressable>
-      {isModalOpen && (
-        <Animated.View entering={FadeInDown.duration(400)} style={styles.modal}>
-          <View style={styles.modalHeader}>
-            <View style={styles.searchContainer}>
-              <Search size={20} color="#999" />
-              <TextInput
-                style={styles.modalSearchInput}
-                placeholder="Type airport or city name"
-                autoFocus
-              />
-            </View>
-            <Pressable
-              onPress={() => setIsModalOpen(false)}
-              style={styles.closeModal}
-            >
-              <X size={24} color="#000" />
-            </Pressable>
+export const Dropdown = React.memo(
+  ({
+    children,
+    isModalOpen,
+    setIsModalOpen,
+  }: {
+    children: React.ReactNode;
+    isModalOpen: boolean;
+    setIsModalOpen: (isOpen: boolean) => void;
+  }) => {
+    return (
+      <>
+        <Pressable
+          onPress={() => setIsModalOpen(true)}
+          style={styles.container}
+        >
+          <View style={styles.content}>
+            <Text style={styles.placeholder}>Airport</Text>
+            <Text style={styles.text}>Select or Start Typing</Text>
           </View>
-          <ScrollView>
-            {AIRPORTS.map((airport) => (
-              <Pressable
-                key={airport.id}
-                style={styles.airportRow}
-                onPress={() => handleSelectAirport(airport)}
-              >
-                <Text style={styles.airportRowText}>{airport.name}</Text>
-                <View
-                  style={[
-                    styles.radio,
-                    // selectedId === airport.id && styles.radioActive,
-                  ]}
-                />
-              </Pressable>
-            ))}
-          </ScrollView>
-        </Animated.View>
-      )}
-    </>
-  );
-});
+          <Image source={CaretDown} style={styles.caret} />
+        </Pressable>
+        <ModalCustom
+          isVisible={isModalOpen}
+          setIsVisible={setIsModalOpen}
+          title="The airport where you normally depart from"
+        >
+          {children}
+        </ModalCustom>
+      </>
+    );
+  }
+);
 Dropdown.displayName = 'Dropdown';
 
 const styles = StyleSheet.create({
@@ -99,7 +72,6 @@ const styles = StyleSheet.create({
     height: 20,
     resizeMode: 'contain',
   },
-
   modal: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#fff',
@@ -124,21 +96,4 @@ const styles = StyleSheet.create({
   },
   modalSearchInput: { flex: 1, marginLeft: 10, fontSize: 16 },
   closeModal: { padding: 5 },
-  airportRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
-  airportRowText: { fontSize: 16, fontWeight: '500' },
-  radio: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: '#DDD',
-  },
-  radioActive: { backgroundColor: '#000', borderColor: '#000' },
 });

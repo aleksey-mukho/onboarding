@@ -20,6 +20,7 @@ export const InteractiveTextInput = React.memo(
     currentStep,
     setCurrentStep,
     dataType,
+    onChangeTextCustom,
   }: {
     inputRef: React.RefObject<TextInput | null>;
     text: string;
@@ -28,6 +29,7 @@ export const InteractiveTextInput = React.memo(
     currentStep: number | null;
     setCurrentStep: (step: number) => void;
     dataType: 'travelType' | 'airportType';
+    onChangeTextCustom?: () => void;
   }) => {
     useEffect(() => {
       if (isValid)
@@ -55,6 +57,12 @@ export const InteractiveTextInput = React.memo(
         setCurrentStep(1);
       }
     }, [currentStep, setCurrentStep, dataType]);
+
+    const onChangeText = useCallback((text: string) => {
+      setText(text);
+
+      onChangeTextCustom?.();
+    }, []);
 
     const paceholderText = dataType === 'travelType' ? 'Travel type' : 'Place';
 
@@ -93,7 +101,7 @@ export const InteractiveTextInput = React.memo(
               style={[styles.input, animatedInputTextStyle]}
               placeholder={dataType === 'travelType' ? 'Travel type' : 'Place'}
               value={text}
-              onChangeText={setText}
+              onChangeText={onChangeText}
               onPressIn={onFocus}
             />
           </Animated.View>

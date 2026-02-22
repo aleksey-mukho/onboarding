@@ -15,7 +15,7 @@ import { NextButton } from '@/widgets/buttons/nextButton/nextButton';
 import { TRAVEL_OPTIONS } from '@/screens/onboarding/onboardingQuestions/travelOptions';
 import { InteractiveTextInput } from '@/screens/onboarding/onboardingQuestions/interactiveTextInput';
 import { Dropdown } from '@/widgets/dropdown/dropdown';
-import { HomeAirportDropdown } from '@/screens/onboarding/onboardingQuestions/homeAirportDropdown';
+import { HomeAirportDropdown } from '@/screens/onboarding/onboardingQuestions/homeAirportDropdown/homeAirportDropdown';
 
 export const Onboarding = React.memo(() => {
   const travelInputRef = useRef<TextInput>(null);
@@ -24,6 +24,7 @@ export const Onboarding = React.memo(() => {
   const [currentStep, setCurrentStep] = useState(0);
   const [travelType, setTravelType] = useState('');
   const [airportName, setAirportName] = useState('');
+  const [isAirportsModalOpen, setIsAirportsModalOpen] = useState(false);
 
   const isValidTravelType = TRAVEL_OPTIONS.some(
     (opt) => opt.id === travelType.toLowerCase()
@@ -36,6 +37,12 @@ export const Onboarding = React.memo(() => {
       setCurrentStep(1);
     }
   }, [currentStep]);
+
+  const onChangeAirportName = useCallback(() => {
+    if (!isAirportsModalOpen) {
+      setIsAirportsModalOpen(true);
+    }
+  }, [isAirportsModalOpen]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -61,6 +68,7 @@ export const Onboarding = React.memo(() => {
           setText={setAirportName}
           isValid={isValidTravelType}
           dataType="airportType"
+          onChangeTextCustom={onChangeAirportName}
         />
         <View style={styles.fillSpace} />
         <Animated.View
@@ -81,7 +89,12 @@ export const Onboarding = React.memo(() => {
               setTravelType={setTravelType}
             />
           ) : (
-            <HomeAirportDropdown />
+            <HomeAirportDropdown
+              airportName={airportName}
+              isModalOpen={isAirportsModalOpen}
+              setIsModalOpen={setIsAirportsModalOpen}
+              setAirportName={setAirportName}
+            />
           )}
           <NextButton
             isActive={isActiveNextButton}
