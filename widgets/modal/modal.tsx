@@ -43,20 +43,25 @@ export function ModalCustom({
   const translateY = useSharedValue(windowHeight);
   const blurOpacity = useSharedValue(0);
 
+  const onClose = useCallback(() => {
+    translateY.value = withTiming(windowHeight, {
+      duration: 300,
+      easing: Easing.in(Easing.ease),
+    });
+    blurOpacity.value = withTiming(0, {
+      duration: 300,
+      easing: Easing.in(Easing.ease),
+    });
+
+    setTimeout(() => {
+      setIsVisibleLocal(false);
+      setIsVisible(false);
+    }, 300);
+  }, [setIsVisible, setIsVisibleLocal]);
+
   useEffect(() => {
     if (!isVisible) {
-      translateY.value = withTiming(windowHeight, {
-        duration: 300,
-        easing: Easing.in(Easing.ease),
-      });
-      blurOpacity.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.in(Easing.ease),
-      });
-
-      setTimeout(() => {
-        setIsVisibleLocal(false);
-      }, 300);
+      onClose();
     } else {
       setIsVisibleLocal(true);
     }
@@ -83,14 +88,6 @@ export function ModalCustom({
       });
     }
   }, [isVisibleLocal]);
-
-  const onClose = useCallback(() => {
-    setTimeout(() => {
-      setIsVisible(false);
-    }, 300);
-
-    setIsVisibleLocal(false);
-  }, [setIsVisible, setIsVisibleLocal]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
