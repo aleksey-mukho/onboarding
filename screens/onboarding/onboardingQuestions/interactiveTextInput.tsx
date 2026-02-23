@@ -63,7 +63,7 @@ export const InteractiveTextInput = React.memo(
       onChangeTextCustom?.();
     }, []);
 
-    const paceholderText = dataType === 'travelType' ? 'Travel type' : 'Place';
+    const placeholderText = dataType === 'travelType' ? 'Travel type' : 'Place';
 
     return (
       <Animated.View
@@ -82,12 +82,6 @@ export const InteractiveTextInput = React.memo(
           <Animated.View
             style={[styles.inputContainer, animatedInputContainerStyle]}
           >
-            <Animated.Text
-              style={[styles.hiddenMeasureText, animatedInputTextStyle]}
-              numberOfLines={1}
-            >
-              {text || paceholderText}
-            </Animated.Text>
             <AnimatedTextInput
               ref={inputRef}
               placeholderTextColor="#00000040"
@@ -126,14 +120,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
   },
-  hiddenMeasureText: {
-    fontSize: 24,
-    fontWeight: '600',
-    opacity: 0,
-    paddingHorizontal: 8,
-  },
   input: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     fontSize: 24,
     fontWeight: '600',
     backgroundColor: '#e9d5ff',
