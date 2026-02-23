@@ -44,7 +44,22 @@ export function ModalCustom({
   const blurOpacity = useSharedValue(0);
 
   useEffect(() => {
-    setIsVisibleLocal(isVisible);
+    if (!isVisible) {
+      translateY.value = withTiming(windowHeight, {
+        duration: 300,
+        easing: Easing.in(Easing.ease),
+      });
+      blurOpacity.value = withTiming(0, {
+        duration: 300,
+        easing: Easing.in(Easing.ease),
+      });
+
+      setTimeout(() => {
+        setIsVisibleLocal(false);
+      }, 300);
+    } else {
+      setIsVisibleLocal(true);
+    }
   }, [isVisible]);
 
   useEffect(() => {
@@ -59,11 +74,11 @@ export function ModalCustom({
       });
     } else {
       translateY.value = withTiming(windowHeight, {
-        duration: 300,
+        duration: 3000,
         easing: Easing.in(Easing.ease),
       });
       blurOpacity.value = withTiming(0, {
-        duration: 300,
+        duration: 3000,
         easing: Easing.in(Easing.ease),
       });
     }
@@ -122,7 +137,7 @@ export function ModalCustom({
 
   return (
     <Modal
-      visible={isVisible}
+      visible={isVisibleLocal}
       transparent={true}
       animationType="none"
       onRequestClose={onClose}
