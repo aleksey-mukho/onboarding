@@ -39,7 +39,9 @@ export const Onboarding = React.memo(() => {
   );
 
   const isActiveNextButton =
-    currentStep === 0 ? isValidTravelType : isValidAirportName;
+    currentStep === 0
+      ? isValidTravelType
+      : isValidTravelType && isValidAirportName;
 
   const onNextButtonPress = useCallback(() => {
     if (currentStep === 0) {
@@ -63,7 +65,7 @@ export const Onboarding = React.memo(() => {
         style={styles.container}
       >
         <OnboardingHeader />
-        {!isValidTravelType && (
+        {!isValidTravelType && currentStep === 0 && (
           <Text style={styles.descriptionTravelType}>
             To personalise your recommendations, tell me a little about how you
             travel:
